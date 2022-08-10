@@ -1,0 +1,47 @@
+import { StickyStyler } from '@angular/cdk/table';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ConnectableObservable } from 'rxjs';
+import { ApiStudent } from 'src/app/models/api-models/student.model';
+import { UiStudent } from 'src/app/models/ui-models/student.model';
+import { StudentService } from '../student.service';
+
+@Component({
+  selector: 'app-view-student',
+  templateUrl: './view-student.component.html',
+  styleUrls: ['./view-student.component.scss'],
+})
+export class ViewStudentComponent implements OnInit {
+  studentId: string | null | undefined;
+  student: UiStudent = {
+    id: '',
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
+    email: '',
+    mobile: 0,
+    profileImageUrl: '',
+    genteder: { id: '', description: '' },
+    address: { id: '', physicalAddress: '', postalAddress: '' },
+  };
+
+  constructor(
+    private readonly studentService: StudentService,
+    private readonly route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      this.studentId = params.get('id');
+
+      if (this.studentId) {
+        this.studentService.getStudent(this.studentId).subscribe({
+          next: (successReturn) => {
+            this.student = successReturn;
+          },
+          error: (errorReturn) => {},
+        });
+      }
+    });
+  }
+}

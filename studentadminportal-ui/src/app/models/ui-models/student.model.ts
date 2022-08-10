@@ -1,7 +1,7 @@
 import { Address } from './address.model';
 import { Gender } from './gender.model';
 
-export interface Student {
+export interface UiStudent {
   id: string;
   firstName: string;
   lastName: string;
