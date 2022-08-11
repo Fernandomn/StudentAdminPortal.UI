@@ -9,6 +9,6 @@ export interface ApiStudent {
   email: string;
   mobile: number;
   profileImageUrl: string;
-  genteder: Gender;
+  gender: Gender;
   address: Address;
 }

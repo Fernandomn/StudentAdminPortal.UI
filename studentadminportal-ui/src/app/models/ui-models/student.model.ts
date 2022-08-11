@@ -9,6 +9,6 @@ export interface UiStudent {
   email: string;
   mobile: number;
   profileImageUrl: string;
-  genteder: Gender;
+  gender: Gender;
   address: Address;
 }

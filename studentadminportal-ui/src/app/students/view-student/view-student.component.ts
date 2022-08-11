@@ -1,8 +1,5 @@
-import { StickyStyler } from '@angular/cdk/table';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ConnectableObservable } from 'rxjs';
-import { ApiStudent } from 'src/app/models/api-models/student.model';
 import { UiStudent } from 'src/app/models/ui-models/student.model';
 import { StudentService } from '../student.service';
 
@@ -21,7 +18,7 @@ export class ViewStudentComponent implements OnInit {
     email: '',
     mobile: 0,
     profileImageUrl: '',
-    genteder: { id: '', description: '' },
+    gender: { id: '', description: '' },
     address: { id: '', physicalAddress: '', postalAddress: '' },
   };
 
