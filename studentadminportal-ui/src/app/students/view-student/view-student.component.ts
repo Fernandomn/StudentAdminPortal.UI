@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { UiGender } from 'src/app/models/ui-models/gender.model';
 import { UiStudent } from 'src/app/models/ui-models/student.model';
+import { GenderService } from 'src/app/services/gender.service';
 import { StudentService } from '../student.service';
 
 @Component({
@@ -18,13 +21,17 @@ export class ViewStudentComponent implements OnInit {
     email: '',
     mobile: 0,
     profileImageUrl: '',
+    genderId: '',
     gender: { id: '', description: '' },
     address: { id: '', physicalAddress: '', postalAddress: '' },
   };
+  genderList: UiGender[] = [];
 
   constructor(
     private readonly studentService: StudentService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly genderService: GenderService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -33,12 +40,38 @@ export class ViewStudentComponent implements OnInit {
 
       if (this.studentId) {
         this.studentService.getStudent(this.studentId).subscribe({
-          next: (successReturn) => {
-            this.student = successReturn;
+          next: (successResponse) => {
+            this.student = successResponse;
           },
-          error: (errorReturn) => {},
+          error: (errorResponse) => {
+            console.error(errorResponse);
+          },
+        });
+
+        this.genderService.getGenderList().subscribe({
+          next: (successResponse) => {
+            this.genderList = successResponse;
+          },
+          error: (errorResponse) => {
+            console.error(errorResponse);
+          },
         });
       }
+    });
+  }
+
+  onUpdate(): void {
+    this.studentService.updateStudent(this.student.id, this.student).subscribe({
+      next: (successResponse) => {
+        if (successResponse) {
+          this.snackBar.open('Student updated successfully', undefined, {
+            duration: 2000,
+          });
+        }
+      },
+      error: (errorResponse) => {
+        console.log(errorResponse);
+      },
     });
   }
 }

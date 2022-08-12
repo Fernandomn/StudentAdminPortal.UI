@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiStudent } from '../models/api-models/student.model';
+import { UpdateStudentRequest } from '../models/api-models/update-student-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,22 @@ export class StudentService {
   getStudent(studentId: string): Observable<ApiStudent> {
     return this.httpClient.get<ApiStudent>(
       `${this.baseApiUrl}/Students/${studentId}`
+    );
+  }
+
+  updateStudent(
+    studentId: string,
+    studentRequest: ApiStudent
+  ): Observable<ApiStudent> {
+    const updateStudentRequest: UpdateStudentRequest = {
+      ...studentRequest,
+      physicalAddress: studentRequest.address.physicalAddress,
+      postalAddress: studentRequest.address.postalAddress,
+    };
+
+    return this.httpClient.put<ApiStudent>(
+      `${this.baseApiUrl}/Students/${studentId}`,
+      updateStudentRequest
     );
   }
 }
