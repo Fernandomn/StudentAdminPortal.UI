@@ -1,4 +1,4 @@
-export interface Gender {
+export interface UiGender {
   id: string;
   description: string;
 }

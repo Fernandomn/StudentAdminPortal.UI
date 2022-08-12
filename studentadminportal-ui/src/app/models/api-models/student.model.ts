@@ -1,5 +1,5 @@
 import { Address } from './address.model';
-import { Gender } from './gender.model';
+import { ApiGender } from './gender.model';
 
 export interface ApiStudent {
   id: string;
@@ -9,6 +9,7 @@ export interface ApiStudent {
   email: string;
   mobile: number;
   profileImageUrl: string;
-  gender: Gender;
+  genderId: string;
+  gender: ApiGender;
   address: Address;
 }
