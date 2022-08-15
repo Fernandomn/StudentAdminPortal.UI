@@ -128,7 +128,14 @@
 
         <div class="row">
           <div class="col-xs-12">
-            <button color="primary" mat-raised-button (click)="onUpdate()">Save</button>
+            <div class="row between-xs">
+              <button color="primary" mat-raised-button (click)="onUpdate()">
+                Save
+              </button>
+              <button color="warn" mat-raised-button (click)="onDelete()">
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </form>
