@@ -26,6 +26,7 @@ export class ViewStudentComponent implements OnInit {
     address: { id: '', physicalAddress: '', postalAddress: '' },
   };
   genderList: UiGender[] = [];
+  isNewStudent: boolean = false;
 
   constructor(
     private readonly studentService: StudentService,
@@ -35,29 +36,37 @@ export class ViewStudentComponent implements OnInit {
     private router: Router
   ) {}
 
+  get headerText(): string {
+    return this.isNewStudent ? 'Add New Student' : 'Edit Student';
+  }
+
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.studentId = params.get('id');
 
       if (this.studentId) {
-        this.studentService.getStudent(this.studentId).subscribe({
-          next: (successResponse) => {
-            this.student = successResponse;
-          },
-          error: (errorResponse) => {
-            console.error(errorResponse);
-          },
-        });
+        this.isNewStudent = !!this.studentId.toLowerCase().match(/add/);
 
-        this.genderService.getGenderList().subscribe({
-          next: (successResponse) => {
-            this.genderList = successResponse;
-          },
-          error: (errorResponse) => {
-            console.error(errorResponse);
-          },
-        });
+        if (!this.isNewStudent) {
+          this.studentService.getStudent(this.studentId).subscribe({
+            next: (successResponse) => {
+              this.student = successResponse;
+            },
+            error: (errorResponse) => {
+              console.error(errorResponse);
+            },
+          });
+        }
       }
+
+      this.genderService.getGenderList().subscribe({
+        next: (successResponse) => {
+          this.genderList = successResponse;
+        },
+        error: (errorResponse) => {
+          console.error(errorResponse);
+        },
+      });
     });
   }
 
@@ -98,5 +107,25 @@ export class ViewStudentComponent implements OnInit {
         },
       });
     }
+  }
+
+  onAdd(): void {
+    this.studentService.addStudent(this.student).subscribe({
+      next: (successResponse) => {
+        if (successResponse) {
+          this.snackBar
+            .open('Student added successfully', undefined, {
+              duration: 2000,
+            })
+            .afterDismissed()
+            .subscribe(() => {
+              this.router.navigateByUrl(`students/${successResponse.id}`);
+            });
+        }
+      },
+      error: (errorResponse) => {
+        console.error(errorResponse);
+      },
+    });
   }
 }
